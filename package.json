@@ -1,5 +1,5 @@
 {
-  "name": "@ranjithrajv/opencode-skill-lister",
+  "name": "@ranjithraj/opencode-skill-lister",
   "version": "1.0.0-alpha.1",
   "description": "Lists available Skills in the OpenCode sidebar, showing name and description for each skill.",
   "keywords": [
