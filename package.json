@@ -1,6 +1,6 @@
 {
   "name": "opencode-skill-lister",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Lists available Skills in the OpenCode sidebar, showing name and description for each skill.",
   "keywords": [
     "opencode",
@@ -52,7 +52,7 @@
   "peerDependencies": {
     "@opentui/core": "^0.5.11",
     "@opentui/solid": "^0.5.11",
-    "solid-js": "^1.9.15"
+    "solid-js": "^1.9.12"
   },
   "packageManager": "npm@11.19.1"
 }
