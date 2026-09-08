@@ -1,6 +1,6 @@
 {
   "name": "opencode-skill-lister",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.4",
   "description": "Lists available Skills in the OpenCode sidebar, showing name and description for each skill.",
   "keywords": [
     "opencode",
@@ -15,15 +15,22 @@
     "url": "git+https://github.com/ranjithrajv/opencode-skill-lister.git"
   },
   "files": [
-    "index.ts",
-    "tui.tsx"
+    "dist"
   ],
   "type": "module",
   "exports": {
-    ".": "./index.ts",
-    "./tui": "./tui.tsx"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./tui": {
+      "types": "./dist/tui.d.ts",
+      "default": "./dist/tui.js"
+    }
   },
   "scripts": {
+    "build": "vite build --config vite.build.config.ts && tsc --noEmit false --emitDeclarationOnly --declaration --outDir dist",
+    "prepublishOnly": "npm run build",
     "check": "vp check",
     "check:fix": "vp check --fix",
     "fmt": "vp fmt",

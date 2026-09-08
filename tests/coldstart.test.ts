@@ -42,8 +42,8 @@ describe("cold start", () => {
     const { ctx, slots } = emptyCtx()
     const cleanup = await plugin.setup(ctx)
     expect(typeof cleanup).toBe("function")
-    const targets = slots.map((s) => s.after ?? s.append ?? s.replace)
-    expect(targets).toContain("sidebar.content")
+    const targets = slots.map((s) => s.before ?? s.after ?? s.append ?? s.replace)
+    expect(targets).toContain("sidebar.footer")
     expect(() => cleanup()).not.toThrow()
   })
 

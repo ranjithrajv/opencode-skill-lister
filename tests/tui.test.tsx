@@ -239,9 +239,9 @@ function text(): string {
 }
 
 describe("plugin setup", () => {
-  test("registers a sidebar slot after sidebar.content", async () => {
+  test("registers a sidebar slot before sidebar.footer", async () => {
     const h = await boot({ lists: [[{ id: "a" }]] })
-    expect(h.slot.after).toBe("sidebar.content")
+    expect(h.slot.before).toBe("sidebar.footer")
     expect(typeof h.slot.render).toBe("function")
   })
 
@@ -253,7 +253,7 @@ describe("plugin setup", () => {
 
   test("a throwing loadSkills does not break setup", async () => {
     const h = await boot({ listThrows: new Error("boom") })
-    expect(h.slot.after).toBe("sidebar.content")
+    expect(h.slot.before).toBe("sidebar.footer")
   })
 
   test("renders the error fallback when the skill list throws", async () => {

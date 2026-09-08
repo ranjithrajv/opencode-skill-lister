@@ -131,12 +131,11 @@ export default Plugin.define({
     // Never await setup: slot renders must not block on this.
     loadSkills(context).catch(() => {})
 
-    // Placed with `after` so it renders below the built-in sidebar.content
-    // appends (Context, MCP). Multiple plugins using `after` on the same
-    // slot render in opencode.json `plugins` order, so the skill list sits
-    // directly under MCP, before later plugins (e.g. model recommender).
+    // Placed with `before` so it renders above the built-in sidebar.footer
+    // (Skills list sits directly above the footer, below all sidebar.content
+    // appends such as Context and MCP).
     return context.ui.slot({
-      after: "sidebar.content",
+      before: "sidebar.footer",
       render: ({ sessionID }: { sessionID?: string }) => <SkillList sessionID={sessionID} />,
     })
   },
