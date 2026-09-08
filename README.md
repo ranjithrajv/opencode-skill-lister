@@ -29,15 +29,23 @@ ponytail ⚡
 
 ## Install
 
-The plugin is already wired into the workspace `opencode.json`:
+Published on [npm](https://www.npmjs.com/package/opencode-skill-lister).
+
+**Automatic (recommended)** — add it to your OpenCode config (`~/.config/opencode/opencode.json`) and it installs on startup:
 
 ```jsonc
-{
-  "plugins": ["./opencode-skill-lister"],
-}
+{ "plugins": ["opencode-skill-lister"] }
 ```
 
-Restart the TUI (or `opencode2 service restart`) to load it.
+**Manual**:
+
+```sh
+npm install opencode-skill-lister
+```
+
+
+Restart the TUI (or `opencode2 service restart`) after changing the config.
+Placement: appends to `sidebar.content`.
 
 ## License
 
