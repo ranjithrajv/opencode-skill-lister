@@ -1,0 +1,49 @@
+{
+  "name": "opencode-skill-lister",
+  "version": "0.1.0",
+  "description": "Lists available Skills in the OpenCode sidebar, showing name and description for each skill.",
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "sidebar",
+    "skills"
+  ],
+  "license": "AGPL-3.0",
+  "author": "Ranjith Raj",
+  "files": [
+    "index.ts",
+    "tui.tsx"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./tui": "./tui.tsx"
+  },
+  "scripts": {
+    "check": "vp check",
+    "check:fix": "vp check --fix",
+    "fmt": "vp fmt",
+    "lint": "vp lint",
+    "typecheck": "vp check --typecheck",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@opencode-ai/plugin": "beta",
+    "opencode-plugin-kit": "file:../opencode-plugin-kit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.5.0",
+    "@vitest/coverage-v8": "^5.0.0",
+    "happy-dom": "^20.14.0",
+    "typescript": "^7.0.2",
+    "vite-plugin-solid": "^2.11.14",
+    "vite-plus": "^0.1.16",
+    "vitest": "^5.0.0"
+  },
+  "peerDependencies": {
+    "@opentui/core": "^0.5.11",
+    "@opentui/solid": "^0.5.11",
+    "solid-js": "^1.9.15"
+  },
+  "packageManager": "bun@1.4.2"
+}
