@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest"
-import plugin from "./index.ts"
+import plugin from "../index.ts"
 
 describe("server entrypoint", () => {
   test("exposes a plugin with a no-op setup", () => {

@@ -9,6 +9,7 @@ interface FakeCtxOptions {
   /** results returned by successive skill.list() calls */
   lists?: Array<any[] | undefined>
   listThrows?: Error
+  syncThrows?: Error
 }
 
 interface Harness {
@@ -38,6 +39,7 @@ function makeCtx(opts: FakeCtxOptions = {}): Harness {
           sync: async (location: any) => {
             calls.sync++
             calls.syncLocations.push(location)
+            if (opts.syncThrows) throw opts.syncThrows
             lists.push(...(opts.lists ?? []))
           },
         },
@@ -158,7 +160,8 @@ describe("loadSkills", () => {
     const skills = await loadSkills(h.ctx)
     expect(h.calls.listLocations).toEqual([{ directory: "/explicit" }])
     expect(skills).toEqual([{ id: "a", name: undefined, slash: false }])
-    expect(h.calls.sync).toBe(0)
+    // The store may hold stale frontmatter, so loadSkills always re-syncs.
+    expect(h.calls.sync).toBe(1)
   })
 
   test("falls back to ctx.data.location.default() when ctx.location is missing", async () => {
@@ -167,26 +170,28 @@ describe("loadSkills", () => {
     expect(h.calls.listLocations).toEqual([{ directory: "/fallback/project" }])
   })
 
-  test("syncs when the cached list is empty, then reads again", async () => {
-    const h = makeCtx({ lists: [[], [{ id: "a" }, { id: "b", name: "Bee" }]] })
+  test("always syncs before reading, then returns the synced list", async () => {
+    const h = makeCtx({ lists: [[{ id: "a" }, { id: "b", name: "Bee" }]] })
     const skills = await loadSkills(h.ctx)
     expect(h.calls.sync).toBe(1)
+    expect(h.calls.list).toBe(1)
     expect(skills).toEqual([
       { id: "a", name: undefined, slash: false },
       { id: "b", name: "Bee", slash: false },
     ])
   })
 
-  test("syncs when the cached list is undefined", async () => {
-    const h = makeCtx({ lists: [undefined, [{ id: "a" }]] })
-    await loadSkills(h.ctx)
+  test("an empty post-sync list yields no skills", async () => {
+    const h = makeCtx({ lists: [[]] })
+    const skills = await loadSkills(h.ctx)
     expect(h.calls.sync).toBe(1)
+    expect(skills).toEqual([])
   })
 
-  test("does not sync when the cache is already primed", async () => {
-    const h = makeCtx({ lists: [[{ id: "a" }, { id: "b" }]] })
+  test("a still-undefined post-sync list is treated as empty", async () => {
+    const h = makeCtx({ lists: [[undefined]] })
     await loadSkills(h.ctx)
-    expect(h.calls.sync).toBe(0)
+    expect(h.calls.sync).toBe(1)
     expect(h.calls.list).toBe(1)
   })
 
@@ -195,6 +200,13 @@ describe("loadSkills", () => {
     const skills = await loadSkills(h.ctx)
     expect(h.calls.sync).toBe(1)
     expect(skills).toEqual([])
+  })
+
+  test("a throwing sync is swallowed and the cached list is still read", async () => {
+    const h = makeCtx({ syncThrows: new Error("no sync"), lists: [[{ id: "a" }]] })
+    const skills = await loadSkills(h.ctx)
+    expect(h.calls.sync).toBe(1)
+    expect(skills).toEqual([{ id: "a", name: undefined, slash: false, category: undefined }])
   })
 
   test("normalizes entries and drops empty ids", async () => {
@@ -210,8 +222,8 @@ describe("loadSkills", () => {
 
 // Static import: a dynamic `await import()` here creates a second module
 // instance whose v8 coverage blocks get misattributed, breaking 100%.
-import plugin from "./tui.tsx"
-import { loadSkills, normalize, skillLabel } from "./tui.tsx"
+import plugin from "../tui.tsx"
+import { loadSkills, normalize, skillLabel } from "../tui.tsx"
 
 async function boot(opts: FakeCtxOptions = {}): Promise<Harness> {
   const h = makeCtx(opts)
@@ -233,10 +245,10 @@ describe("plugin setup", () => {
     expect(typeof h.slot.render).toBe("function")
   })
 
-  test("warms the skill cache at setup (empty cache triggers sync)", async () => {
-    const h = await boot({ lists: [[], [{ id: "a" }]] })
+  test("warms the skill cache at setup (sync runs once)", async () => {
+    const h = await boot({ lists: [[{ id: "a" }]] })
     expect(h.calls.sync).toBe(1)
-    expect(h.calls.list).toBeGreaterThanOrEqual(2)
+    expect(h.calls.list).toBeGreaterThanOrEqual(1)
   })
 
   test("a throwing loadSkills does not break setup", async () => {

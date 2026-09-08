@@ -7,12 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-09-08
+
 ### Added
 
 - Sidebar section listing available Skills with collapsible UI
-- 32 tests with 100% coverage
-- Vite+ developer tooling
-- GitHub Actions CI
-- Pre-commit hooks
 
 [Unreleased]: https://github.com/ranjithraj/opencode-skill-lister/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/ranjithraj/opencode-skill-lister/releases/tag/v0.1.0

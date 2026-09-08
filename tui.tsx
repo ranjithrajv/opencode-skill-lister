@@ -1,6 +1,7 @@
 import { Plugin, usePlugin } from "@opencode-ai/plugin/tui"
 import { createResource, For, Show } from "solid-js"
-import { CollapsibleGroup, CollapsibleSection, resolveLocation } from "opencode-plugin-kit"
+import { CollapsibleGroup, CollapsibleSection } from "opencode-plugin-kit/collapsible"
+import { resolveLocation } from "opencode-plugin-kit"
 
 // Skill info from the OpenCode API — kept minimal for the sidebar view.
 // Entries carry id/name/slash (see the built-in Skills picker).
@@ -55,12 +56,16 @@ export function skillLabel(s: Skill): string {
 // 2. only sync (await) when the cache is empty, then read again
 export async function loadSkills(ctx: any): Promise<Skill[]> {
   const location = resolveLocation(ctx)
-  let list = ctx.data.location.skill.list(location)
-  if (!list || list.length === 0) {
-    await ctx.data.location.skill.sync(location)
-    list = ctx.data.location.skill.list(location) ?? []
-  }
-  return (list as any[]).map(normalize).filter((s) => s.id)
+  // Always re-sync before reading: the store may hold entries synced before
+  // skill frontmatter changed on disk (e.g. newly added categories), and a
+  // sync is a cheap local directory scan.
+  await ctx.data.location.skill.sync(location).catch(() => {})
+  const list = ctx.data.location.skill.list(location) ?? []
+  // Filter before normalizing: a stale store can hold undefined entries.
+  return (list as any[])
+    .filter((s) => s && typeof s === "object")
+    .map(normalize)
+    .filter((s) => s.id)
 }
 
 // Collapsible list rendered through the kit's shared section/group
