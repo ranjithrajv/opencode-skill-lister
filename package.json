@@ -23,9 +23,6 @@
     ".": "./index.ts",
     "./tui": "./tui.tsx"
   },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
   "scripts": {
     "check": "vp check",
     "check:fix": "vp check --fix",
