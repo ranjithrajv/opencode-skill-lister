@@ -1,5 +1,9 @@
 # opencode-skill-lister
 
+[![CI](https://github.com/ranjithrajv/opencode-skill-lister/actions/workflows/ci.yml/badge.svg)](https://github.com/ranjithrajv/opencode-skill-lister/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/opencode-skill-lister)](https://www.npmjs.com/package/opencode-skill-lister)
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
+
 Lists available [Skills](https://opencode.ai/v2/docs/build/plugins) in the
 OpenCode sidebar — grouped into collapsible categories, sorted alphabetically.
 Skills with `autoinvoke` enabled are tagged with ⚡.
@@ -10,7 +14,7 @@ otherwise `general`. Un-categorized skills render as a flat list when no
 skill declares any category.
 
 Appends to `sidebar.content`, alongside other sidebar widgets like the
-model recommender.
+[model recommender](https://github.com/ranjithrajv/opencode-model-recommender).
 
 ## What it shows
 
@@ -45,7 +49,16 @@ npm install opencode-skill-lister
 
 
 Restart the TUI (or `opencode2 service restart`) after changing the config.
+
+## Prerequisites
+
+- OpenCode **V2** (plugin API is beta)
+
 Placement: appends to `sidebar.content`.
+
+## Remove
+
+Remove the plugin's entry from the `plugins` array in `opencode.json`.
 
 ## License
 
