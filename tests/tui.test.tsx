@@ -19,12 +19,12 @@ interface Harness {
 }
 
 function makeCtx(opts: FakeCtxOptions = {}): Harness {
-  const calls = { list: 0, sync: 0, listLocations: [] as any[], syncLocations: [] as any[] }
+  const calls = { list: 0, sync: 0, listLocations: [] as any[], syncLocations: [] as any[], slot: undefined as any }
   const fallbackLocation = { directory: "/fallback/project" }
   const lists = [...(opts.lists ?? [])]
   const ctx: any = {
     theme: { text: { default: "#ffffff", subdued: "#888888" } },
-    ui: { slot: (def: any) => def },
+    ui: { slot: (def: any) => (calls.slot = def, () => {}) },
     location: opts.location,
     data: {
       location: {
@@ -227,8 +227,8 @@ import { loadSkills, normalize, skillLabel } from "../tui.tsx"
 
 async function boot(opts: FakeCtxOptions = {}): Promise<Harness> {
   const h = makeCtx(opts)
-  const slot = plugin.setup(h.ctx)
-  h.slot = slot
+  plugin.setup(h.ctx)
+  h.slot = h.calls.slot
   // give the fire-and-forget cache warm-up a tick
   await new Promise((r) => setTimeout(r, 0))
   return h

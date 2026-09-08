@@ -127,16 +127,22 @@ function SkillList(_props: { sessionID?: string }) {
 export default Plugin.define({
   id: "skill-lister.cli",
   setup(context: any) {
+    // Claim the sidebar slot FIRST: warm-up and view-state init below must
+    // never delay or break the claim (a failed claim renders nothing).
+    let cleanupView: (() => void) | undefined
+    try {
+      cleanupView = context.ui.slot({
+        before: "sidebar.footer",
+        render: ({ sessionID }: { sessionID?: string }) => <SkillList sessionID={sessionID} />,
+      })
+    } catch (error) {
+      console.warn("[skill-lister] failed to claim sidebar slot", error)
+    }
+
     // Warm the skill cache at startup, mirroring the built-in store sync.
     // Never await setup: slot renders must not block on this.
     loadSkills(context).catch(() => {})
 
-    // Placed with `before` so it renders above the built-in sidebar.footer
-    // (Skills list sits directly above the footer, below all sidebar.content
-    // appends such as Context and MCP).
-    return context.ui.slot({
-      before: "sidebar.footer",
-      render: ({ sessionID }: { sessionID?: string }) => <SkillList sessionID={sessionID} />,
-    })
+    return () => cleanupView?.()
   },
 })
