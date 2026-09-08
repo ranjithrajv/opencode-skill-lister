@@ -1,6 +1,6 @@
 {
   "name": "opencode-skill-lister",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "Lists available Skills in the OpenCode sidebar, showing name and description for each skill.",
   "keywords": [
     "opencode",
@@ -48,7 +48,7 @@
     "vitest": "^5.0.0"
   },
   "peerDependencies": {
-    "@opencode-ai/plugin": ">=1.18.25 <2 || 0.0.0-beta-19242",
+    "@opencode-ai/plugin": "0.0.0-beta-19271",
     "@opentui/core": "^0.5.11",
     "@opentui/solid": "^0.5.11",
     "opencode-plugin-kit": "^1.0.0-alpha.1",
