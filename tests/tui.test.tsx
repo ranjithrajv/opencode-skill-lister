@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest"
 import { render } from "solid-js/web"
-import { PluginContextProvider } from "@opencode-ai/plugin/tui"
+import { PluginContextProvider } from "@opencode/plugin/tui"
 
 // -- fixtures ---------------------------------------------------------------
 
@@ -10,6 +10,7 @@ interface FakeCtxOptions {
   lists?: Array<any[] | undefined>
   listThrows?: Error
   syncThrows?: Error
+  slotThrows?: Error
 }
 
 interface Harness {
@@ -23,8 +24,14 @@ function makeCtx(opts: FakeCtxOptions = {}): Harness {
   const fallbackLocation = { directory: "/fallback/project" }
   const lists = [...(opts.lists ?? [])]
   const ctx: any = {
-    theme: { text: { default: "#ffffff", subdued: "#888888" } },
-    ui: { slot: (def: any) => (calls.slot = def, () => {}) },
+    theme: { text: { base: "#ffffff", muted: "#888888" } },
+    ui: {
+      slot: (def: any) => {
+        if (opts.slotThrows) throw opts.slotThrows
+        calls.slot = def
+        return () => {}
+      },
+    },
     location: opts.location,
     data: {
       location: {
@@ -243,6 +250,15 @@ describe("plugin setup", () => {
     const h = await boot({ lists: [[{ id: "a" }]] })
     expect(h.slot.before).toBe("sidebar.footer")
     expect(typeof h.slot.render).toBe("function")
+  })
+
+  test("a throwing slot claim is swallowed", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {})
+    const h = await boot({ slotThrows: new Error("no slot") })
+    expect(warn).toHaveBeenCalledWith("[skill-lister] failed to claim sidebar slot", expect.any(Error))
+    warn.mockRestore()
+    // setup continued past the failed claim and warmed the cache.
+    expect(h.calls.sync).toBe(1)
   })
 
   test("warms the skill cache at setup (sync runs once)", async () => {

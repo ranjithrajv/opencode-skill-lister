@@ -1,4 +1,4 @@
-import { Plugin, usePlugin } from "@opencode-ai/plugin/tui"
+import { Plugin, usePlugin } from "@opencode/plugin/tui"
 import { createResource, For, Show } from "solid-js"
 import { CollapsibleGroup, CollapsibleSection } from "opencode-plugin-kit/collapsible"
 import { resolveLocation } from "opencode-plugin-kit"
@@ -98,7 +98,7 @@ function SkillList(_props: { sessionID?: string }) {
   const SkillRow = (p: { s: Skill }) => (
     <box flexDirection="row" gap={1} minWidth={0}>
       <text flexShrink={0}>•</text>
-      <text fg={theme.text.default} wrapMode="none" truncate flexGrow={1} flexShrink={1} minWidth={0}>
+      <text fg={theme.text.base} wrapMode="none" truncate flexGrow={1} flexShrink={1} minWidth={0}>
         {skillLabel(p.s)}
         {p.s.slash ? "/" : ""}
       </text>
