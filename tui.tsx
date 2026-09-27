@@ -1,3 +1,4 @@
+/** @jsxImportSource @opentui/solid */
 import { Plugin, usePlugin } from "@opencode/plugin/tui"
 import { createResource, For, Show } from "solid-js"
 import { CollapsibleGroup, CollapsibleSection } from "opencode-plugin-kit/collapsible"
