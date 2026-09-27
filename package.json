@@ -1,6 +1,6 @@
 {
   "name": "opencode-skill-lister",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "description": "Lists available Skills in the OpenCode sidebar, showing name and description for each skill.",
   "keywords": [
     "opencode",
@@ -34,7 +34,7 @@
     "test:coverage": "vitest run --coverage.enabled"
   },
   "dependencies": {
-    "@opencode/plugin": "^2.0.15",
+    "@opencode/plugin": "^2.0.3",
     "opencode-plugin-kit": "^1.0.0-alpha.6",
     "solid-js": "^1.9.12"
   },
