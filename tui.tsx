@@ -109,11 +109,11 @@ function SkillList(_props: { sessionID?: string }) {
   return (
     <Show when={!skills.error} fallback={<text>⚠ skills unavailable</text>}>
       <Show when={count() > 0}>
-        <CollapsibleSection title="SKILLS" count={count()}>
+        <CollapsibleSection title="SKILLS" count={count()} theme={theme}>
           <Show when={hasCategories()} fallback={<For each={sorted()}>{(s) => <SkillRow s={s} />}</For>}>
             <For each={groups()}>
               {(g) => (
-                <CollapsibleGroup title={g.cat.toUpperCase()} count={g.items.length}>
+                <CollapsibleGroup title={g.cat.toUpperCase()} count={g.items.length} theme={theme}>
                   <For each={g.items}>{(s) => <SkillRow s={s} />}</For>
                 </CollapsibleGroup>
               )}
