@@ -25,8 +25,6 @@
     "./tui": "./tui.tsx"
   },
   "scripts": {
-    "build": "vite build --config vite.build.config.ts && tsc --noEmit false --emitDeclarationOnly --declaration --outDir dist",
-    "prepublishOnly": "npm run build",
     "check": "vp check",
     "check:fix": "vp check --fix",
     "fmt": "vp fmt",
